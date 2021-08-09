@@ -1,0 +1,67 @@
+{% extends 'shared/base.html' %}
+{% block content %}
+    <div class="d-flex">
+        <div class="d-inline p-2 w-50">
+            <img src="{{ phone.image.url }}" class="w-50 rounded mx-auto d-block">
+        </div>
+        <div class="d-inline p-2 w-50">
+            <div class="d-flex justify-content-between">
+                <h5><u>Brand:</u> {{ phone.brand }}</h5>
+                <h5><u>Model:</u> {{ phone.phone_model }}</h5>
+                <h5><u>Year:</u> {{ phone.year }}</h5>
+            </div>
+            <h5><u>Memory:</u> {{ phone.memory }}GB</h5>
+            {% if request.user.is_authenticated %}
+                <h5><u>Seller:</u> {{ phone.user.email }}</h5>
+            {% else %}
+                <h5><u>Seller:</u><a href="{% url 'register user' %}" class="btn btn-success">Log In/Register</a></h5>
+            {% endif %}
+            <h5><u>Price:</u> {{ phone.price }}$</h5>
+            {% if request.user.is_authenticated %}
+                <h5><u>Contact:</u> {{ phone.contact_number }}</h5>
+            {% else %}
+                <h5><u>Contact:</u> <a href="{% url 'register user' %}" class="btn btn-success">Log In/Register</a></h5>
+            {% endif %}
+            <p class="mt-2">Likes: {{ phone.likes_count }}</p>
+            <p class="mt-2">{{ phone.description }}</p>
+            {% if is_owner %}
+                <div>
+                    <a href="{% url 'edit phone' phone.id %}" class="btn btn-success">Update</a>
+                    <a href="{% url 'delete phone' phone.id %}" class="btn btn-danger">Sold</a>
+                </div>
+            {% else %}
+                <a href="{% url 'like phone' phone.id %}">
+                    {% if is_liked %}
+                        <i class="fa fa-heart" aria-hidden="true"></i>
+                    {% else %}
+                        <i class="fa fa-heart-o" aria-hidden="true"></i>
+                    {% endif %}
+                </a>
+                <p class="mt-2">Likes: {{ phone.likes_count }}</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="d-block" style="background-color: #74fd64; padding:2%">
+        {% if comments %}
+            {% for comment in comments %}
+                <div class="box">
+                    <h5><u>{{ comment.user }}</u>: {{ comment.text }}</h5>
+                    <hr>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="box">
+                <h3>No comments yet.</h3>
+            </div>
+        {% endif %}
+        {% if not is_owner %}
+            <div class="box">
+                <form method="post" action="{% url 'comment phone' phone.id %}">
+                    {% csrf_token %}
+                    {{ comment_form }}
+                    <button class="btn btn-primary mt-2" type="submit">Add comment</button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

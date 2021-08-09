@@ -1,0 +1,29 @@
+{% extends 'shared/base.html' %}
+{% block content %}
+    <div class="jumbotron parent" style="background-color: #74fd64">
+        <img style="width: 100%"
+             src="https://www.telegraph.co.uk/content/dam/recommended/2020/11/25/Best-smartphones-2020-review-summary_trans_NvBQzQNjv4Bq7bWQfKLf2dhrSxHZc33L6sZqUGxGI-SpjAtF4fl6ZDo.png?imwidth=1240"
+             alt="">
+        <div class="absolute">
+            <h1 class="display-5">Sell your phone fast and easy!</h1>
+            <hr class="my-4">
+            {% if not request.user.is_authenticated %}
+                <div class="inner cover">
+                    <h1 class="cover-heading"></h1>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <p class="lead">Already have an account? <br><a href="{% url 'log in user' %}"
+                                                                            class="btn btn-lg btn-secondary">Log In
+                            </a></p>
+                        </div>
+                        <div class="col-lg-6">
+                            <p class="lead"> Do not have an account? <br>
+                                <a href="{% url 'register user' %}" class="btn btn-lg btn-secondary">Register</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'shared/base.html' %}
+{% block content %}
+    {% if phones %}
+        <h1 class='text-center'>All phones</h1>
+        <div class="row">
+            {% for phone in phones %}
+                <div class="col-lg-4" style="background-color: #74fd64">
+                    <div class="card" style="width: 18rem; background-color: #74fd64">
+                        <img src="{{ phone.image.url }}" class="card-img-top" alt="{{ phone.description }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ phone.brand }} {{ phone.phone_model }} {{ phone.year }}</h5>
+                            <h5 class="card-title">{{ phone.memory }}GB</h5>
+                            <h5 class="card-title">Price: {{ phone.price }}$</h5>
+                            <a href="{% url 'phone details' phone.id %}" class="btn btn-primary">See details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h1 class='text-center'>No phones for sale yet!</h1>
+        <li><a class="btn btn-success" href="{% url 'sell phone' %}">List a phone</a></li>
+    {% endif %}
+{% endblock %}
