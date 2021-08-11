@@ -10,17 +10,6 @@ from sell_your_phone.phones.models import Phone
 from sell_your_phone.accounts.models import Profile
 
 
-class LoginUserView(LoginView):
-    template_name = 'accounts/login.html'
-    authentication_form = LoginForm
-    success_url = reverse_lazy('index')
-
-
-def logout_user(request):
-    logout(request)
-    return redirect('index')
-
-
 class RegisterView(CreateView):
     form_class = RegisterForm
     template_name = 'accounts/register.html'
@@ -30,6 +19,17 @@ class RegisterView(CreateView):
         result = super().form_valid(form)
         login(self.request, self.object)
         return result
+
+
+class LoginUserView(LoginView):
+    template_name = 'accounts/login.html'
+    authentication_form = LoginForm
+    success_url = reverse_lazy('index')
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('index')
 
 
 @login_required
