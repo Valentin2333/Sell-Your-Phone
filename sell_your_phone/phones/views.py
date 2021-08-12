@@ -2,17 +2,30 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic import ListView
 
-from sell_your_phone.phones.forms import SellPhoneForm, CommentForm, EditPhoneForm
+from sell_your_phone.phones.forms import SellPhoneForm, CommentForm, EditPhoneForm, SearchForm
 from sell_your_phone.phones.models import Phone, Comment, Like
 
 
-class ListPhonesView(ListView):
+class ListPhonesView(ListView, FormView):
     template_name = 'phones/phone_list.html'
     context_object_name = 'phones'
     model = Phone
+    form_class = SearchForm
+
+
+class SearchResultsView(ListView, FormView):
+    model = Phone
+    template_name = 'phones/search_results.html'
+    form_class = SearchForm
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        object_list = Phone.objects.filter(brand__icontains=query)
+        object_list_2 = Phone.objects.filter(phone_model__icontains=query)
+        return object_list.union(object_list_2)
 
 
 def phone_details(request, pk):

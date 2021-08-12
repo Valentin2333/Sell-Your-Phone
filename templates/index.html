@@ -1,5 +1,9 @@
 {% extends 'shared/base.html' %}
 {% block content %}
+    <form action="{% url 'search results' %}" method='get'>
+        {% csrf_token %}
+        {{ form }}
+    </form>
     <div class="jumbotron parent" style="background-color: #74fd64">
         <img style="width: 100%"
              src="https://www.telegraph.co.uk/content/dam/recommended/2020/11/25/Best-smartphones-2020-review-summary_trans_NvBQzQNjv4Bq7bWQfKLf2dhrSxHZc33L6sZqUGxGI-SpjAtF4fl6ZDo.png?imwidth=1240"

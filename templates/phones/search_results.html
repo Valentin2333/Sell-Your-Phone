@@ -4,10 +4,10 @@
         {% csrf_token %}
         {{ form }}
     </form>
-    {% if phones %}
+    {% if object_list %}
         <h1 class='text-center'>All phones</h1>
         <div class="row">
-            {% for phone in phones %}
+            {% for phone in object_list %}
                 <div class="col-lg-4" style="background-color: #74fd64">
                     <div class="card" style="width: 18rem; background-color: #74fd64">
                         <img src="{{ phone.image.url }}" class="card-img-top" style="width: 285px; height: 310px" alt="{{ phone.description }}">
@@ -22,7 +22,7 @@
             {% endfor %}
         </div>
     {% else %}
-        <h1 class='text-center'>No phones for sale yet!</h1>
+        <h1 class='text-center'>No phones mached your search :(</h1>
         <li><a class="btn btn-success" href="{% url 'sell phone' %}">List a phone</a></li>
     {% endif %}
 {% endblock %}

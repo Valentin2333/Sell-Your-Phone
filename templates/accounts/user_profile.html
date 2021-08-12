@@ -29,7 +29,7 @@
                 {% for phone in phones %}
                     <div class="col-lg-4">
                         <div class="card" style="width: 18rem;">
-                            <img src="{{ phone.image.url }}" class="card-img-top" alt="...">
+                            <img src="{{ phone.image.url }}" style="width: 285px; height: 310px" class="card-img-top" alt="...">
                             <div class="card-body">
                                 <h5 class="card-title">{{ phone.brand }} {{ phone.phone_model }} {{ phone.year }}</h5>
                                 <a href="{% url 'phone details' phone.id %}" class="btn btn-primary">See details</a>
