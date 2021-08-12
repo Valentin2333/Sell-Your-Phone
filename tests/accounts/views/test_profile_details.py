@@ -27,7 +27,7 @@ class ProfileDetailsTest(SellYourPhoneTestCase):
             phone_model=Phone.BRAND_CHOICE_SAMSUNG,
             year=5,
             description='desc',
-            memory=20,
+            memory=64,
             price=200,
             contact_number=+35912345678,
             image='path/to/image.png',
