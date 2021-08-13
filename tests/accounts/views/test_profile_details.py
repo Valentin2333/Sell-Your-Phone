@@ -23,8 +23,8 @@ class ProfileDetailsTest(SellYourPhoneTestCase):
 
     def test_get_details__when_user_logged_in_with_phones__should_get_details(self):
         phone = Phone.objects.create(
-            brand='Test',
-            phone_model=Phone.BRAND_CHOICE_SAMSUNG,
+            brand=Phone.BRAND_CHOICE_SAMSUNG,
+            phone_model='Test model',
             year=5,
             description='desc',
             memory=64,

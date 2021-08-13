@@ -37,7 +37,7 @@ def phone_details(request, pk):
         'phone': phone,
         'comment_form': CommentForm(
             initial={
-                'pet_pk': pk
+                'phone_pk': pk
             }
         ),
         'comments': phone.comment_set.all(),

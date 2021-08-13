@@ -22,7 +22,6 @@
             {% else %}
                 <h5><u>Contact:</u> <a href="{% url 'register user' %}" class="btn btn-success">Log In/Register</a></h5>
             {% endif %}
-            <p class="mt-2">Likes: {{ phone.likes_count }}</p>
             <p class="mt-2">{{ phone.description }}</p>
             {% if is_owner %}
                 <div>
@@ -37,8 +36,8 @@
                         <i class="fa fa-heart-o" aria-hidden="true"></i>
                     {% endif %}
                 </a>
-                <p class="mt-2">Likes: {{ phone.likes_count }}</p>
             {% endif %}
+        <p class="mt-2">Likes: {{ phone.likes_count }}</p>
         </div>
     </div>
     <div class="d-block" style="background-color: #74fd64; padding:2%">

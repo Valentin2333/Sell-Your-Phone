@@ -10,8 +10,8 @@ class LikePhoneTests(PhoneTestUtils, UserTestUtils, SellYourPhoneTestCase):
         self.client.force_login(self.user)
         phone_seller = self.create_user(email='random@abv.bg', password='12345qwe')
         phone = self.create_phone(
-            brand='Test',
-            phone_model=Phone.BRAND_CHOICE_SAMSUNG,
+            brand=Phone.BRAND_CHOICE_SAMSUNG,
+            phone_model='Test model',
             year=5,
             description='desc',
             memory=64,
@@ -39,8 +39,8 @@ class LikePhoneTests(PhoneTestUtils, UserTestUtils, SellYourPhoneTestCase):
         phone_seller = self.create_user(email='random@abv.bg', password='12345qwe')
         phone = self.create_phone_with_like(
             like_user=self.user,
-            brand='Test',
-            phone_model=Phone.BRAND_CHOICE_SAMSUNG,
+            brand=Phone.BRAND_CHOICE_SAMSUNG,
+            phone_model='Test model',
             year=5,
             description='desc',
             memory=64,
