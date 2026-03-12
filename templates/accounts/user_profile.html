@@ -1,48 +1,70 @@
 {% extends 'shared/base.html' %}
 {% load static %}
-
 {% block content %}
-    <div class="text-center">
-        <h1>Hello, {{ request.user }}!</h1>
-        <h5>This is your profile</h5>
+
+<!-- Profile Header -->
+<div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 2rem;">
+    <div style="display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap;">
         {% if profile.profile_image %}
-            <img class="rounded-circle mb-3" src="{{ profile.profile_image.url }}" alt="" width="140"
-                 height="140">
+            <img src="{{ profile.profile_image.url }}" alt="Profile"
+                 style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); flex-shrink: 0;">
         {% else %}
-            <h5>Upload a profile picture!</h5>
-            <img class="rounded-circle mb-3" src="{% static 'images/account_pic.jpg' %}" alt="" width="140"
-                 height="140">
+            <img src="{% static 'images/account_pic.jpg' %}" alt="Profile"
+                 style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid var(--border); flex-shrink: 0;">
         {% endif %}
-        <div class="w-50 m-auto">
-            <form action="{% url 'profile details' %}" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form }}
-                <button>Update</button>
-            </form>
+
+        <div style="flex: 1; min-width: 0;">
+            <h1 style="font-size: 1.2rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ request.user }}</h1>
+            <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.2rem;">
+                {{ phones|length }} listing{{ phones|length|pluralize }}
+            </p>
         </div>
     </div>
-    <hr>
-    {% if phones %}
-        <h2 class='text-center'>Your phone listings</h2>
-        <div class="row">
-            <div class="row">
-                {% for phone in phones %}
-                    <div class="col-lg-4">
-                        <div class="card" style="width: 18rem;">
-                            <img src="{{ phone.image.url }}" style="width: 285px; height: 310px" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ phone.brand }} {{ phone.phone_model }} {{ phone.year }}</h5>
-                                <a href="{% url 'phone details' phone.id %}" class="btn btn-primary">See details</a>
-                            </div>
-                        </div>
+
+    <!-- Upload form on its own row -->
+    <form action="{% url 'profile details' %}" method="post" enctype="multipart/form-data"
+          style="margin-top: 1.25rem; display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+        {% csrf_token %}
+        <div style="flex: 1; min-width: 0;">{{ form }}</div>
+        <button type="submit" class="btn btn-outline" style="white-space: nowrap; flex-shrink: 0;">
+            <i class="fa-solid fa-camera"></i> Update Photo
+        </button>
+    </form>
+</div>
+
+<!-- Listings -->
+<div class="page-header">
+    <h2 style="font-size: 1.25rem; font-weight: 600;">Your Listings</h2>
+    <a href="{% url 'sell phone' %}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Listing</a>
+</div>
+
+{% if phones %}
+    <div class="phones-grid">
+        {% for phone in phones %}
+            <div class="phone-card">
+                <img src="{{ phone.image.url }}" alt="{{ phone.brand }} {{ phone.phone_model }}">
+                <div class="phone-card-body">
+                    <div class="phone-card-title">{{ phone.brand }} {{ phone.phone_model }}</div>
+                    <div class="phone-card-meta">
+                        <span class="badge">{{ phone.year }}</span>
+                        <span class="badge">{{ phone.memory }}GB</span>
                     </div>
-                {% endfor %}
+                    <div class="phone-card-price">${{ phone.price }}</div>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem;">
+                        <a href="{% url 'phone details' phone.id %}" class="btn btn-outline" style="flex: 1; justify-content: center;">View</a>
+                        <a href="{% url 'edit phone' phone.id %}" class="btn btn-outline" style="flex: 1; justify-content: center;"><i class="fa-solid fa-pen"></i> Edit</a>
+                    </div>
+                </div>
             </div>
-        </div>
-    {% else %}
-        <div class="text-center">
-            <h2>You have no phone listings</h2>
-            <a href="{% url 'sell phone' %}" class="btn btn-success">List a phone</a>
-        </div>
-    {% endif %}
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <i class="fa-solid fa-mobile-screen-button"></i>
+        <h2>No listings yet</h2>
+        <p>You haven't listed any phones for sale.</p>
+        <a href="{% url 'sell phone' %}" class="btn btn-primary">List your first phone</a>
+    </div>
+{% endif %}
+
 {% endblock %}

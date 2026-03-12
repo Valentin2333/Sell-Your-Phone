@@ -1,66 +1,138 @@
 {% extends 'shared/base.html' %}
 {% block content %}
-    <div class="d-flex">
-        <div class="d-inline p-2 w-50">
-            <img src="{{ phone.image.url }}" class="w-50 rounded mx-auto d-block">
+
+<a href="{% url 'list phones' %}" class="btn btn-outline" style="margin-bottom: 1.5rem;">
+    <i class="fa-solid fa-arrow-left"></i> Back to listings
+</a>
+
+<style>
+    .details-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        align-items: start;
+    }
+    .details-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+    @media (max-width: 700px) {
+        .details-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    @media (max-width: 480px) {
+        .details-stats {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="details-grid">
+
+    <!-- Image -->
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;">
+        <img src="{{ phone.image.url }}" alt="{{ phone.brand }} {{ phone.phone_model }}"
+             style="width: 100%; height: 380px; object-fit: cover; display: block;">
+    </div>
+
+    <!-- Details -->
+    <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+        <div>
+            <h1 style="font-size: 1.5rem; font-weight: 700; word-break: break-word;">{{ phone.brand }} {{ phone.phone_model }}</h1>
+            <p style="color: var(--text-muted); margin-top: 0.25rem;">{{ phone.year }}</p>
         </div>
-        <div class="d-inline p-2 w-50">
-            <div class="d-flex justify-content-between">
-                <h5><u>Brand:</u> {{ phone.brand }}</h5>
-                <h5><u>Model:</u> {{ phone.phone_model }}</h5>
-                <h5><u>Year:</u> {{ phone.year }}</h5>
+
+        <div style="font-size: 2rem; font-weight: 800; color: var(--accent)">${{ phone.price }}</div>
+
+        <div class="details-stats">
+            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem;">
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Storage</div>
+                <div style="font-weight: 600; margin-top: 0.25rem;">{{ phone.memory }}GB</div>
             </div>
-            <h5><u>Memory:</u> {{ phone.memory }}GB</h5>
-            {% if request.user.is_authenticated %}
-                <h5><u>Seller:</u> {{ phone.user.email }}</h5>
-            {% else %}
-                <h5><u>Seller:</u><a href="{% url 'register user' %}" class="btn btn-success">Log In/Register</a></h5>
-            {% endif %}
-            <h5><u>Price:</u> {{ phone.price }}$</h5>
-            {% if request.user.is_authenticated %}
-                <h5><u>Contact:</u> {{ phone.contact_number }}</h5>
-            {% else %}
-                <h5><u>Contact:</u> <a href="{% url 'register user' %}" class="btn btn-success">Log In/Register</a></h5>
-            {% endif %}
-            <p class="mt-2">{{ phone.description }}</p>
-            {% if is_owner %}
-                <div>
-                    <a href="{% url 'edit phone' phone.id %}" class="btn btn-success">Update</a>
-                    <a href="{% url 'delete phone' phone.id %}" class="btn btn-danger">Sold</a>
-                </div>
-            {% else %}
-                <a href="{% url 'like phone' phone.id %}">
-                    {% if is_liked %}
-                        <i class="fa fa-heart" aria-hidden="true"></i>
+            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem;">
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Brand</div>
+                <div style="font-weight: 600; margin-top: 0.25rem;">{{ phone.brand }}</div>
+            </div>
+            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; overflow: hidden;">
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Seller</div>
+                <div style="font-weight: 600; margin-top: 0.25rem; word-break: break-all; font-size: 0.85rem;">
+                    {% if request.user.is_authenticated %}
+                        {{ phone.user.email }}
                     {% else %}
-                        <i class="fa fa-heart-o" aria-hidden="true"></i>
+                        <a href="{% url 'register user' %}" style="color: var(--accent); text-decoration: none;">Log in to view</a>
                     {% endif %}
+                </div>
+            </div>
+            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; overflow: hidden;">
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Contact</div>
+                <div style="font-weight: 600; margin-top: 0.25rem; word-break: break-all; font-size: 0.85rem;">
+                    {% if request.user.is_authenticated %}
+                        {{ phone.contact_number }}
+                    {% else %}
+                        <a href="{% url 'register user' %}" style="color: var(--accent); text-decoration: none;">Log in to view</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% if phone.description %}
+            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem;">
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Description</div>
+                <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; word-break: break-word;">{{ phone.description }}</p>
+            </div>
+        {% endif %}
+
+        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            {% if is_owner %}
+                <a href="{% url 'edit phone' phone.id %}" class="btn btn-outline"><i class="fa-solid fa-pen"></i> Edit</a>
+                <a href="{% url 'delete phone' phone.id %}" class="btn btn-danger"><i class="fa-solid fa-check"></i> Mark as Sold</a>
+            {% else %}
+                <a href="{% url 'like phone' phone.id %}" class="btn btn-outline"
+                   style="{% if is_liked %}color: var(--danger); border-color: var(--danger);{% endif %}">
+                    <i class="fa-{% if is_liked %}solid{% else %}regular{% endif %} fa-heart"></i>
+                    {{ phone.likes_count }} {% if phone.likes_count == 1 %}like{% else %}likes{% endif %}
                 </a>
             {% endif %}
-        <p class="mt-2">Likes: {{ phone.likes_count }}</p>
         </div>
     </div>
-    <div class="d-block" style="background-color: #74fd64; padding:2%">
-        {% if comments %}
+</div>
+
+<!-- Comments -->
+<div class="divider"></div>
+
+<div style="max-width: 700px;">
+    <h2 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1.5rem;">
+        Comments <span style="color: var(--text-muted); font-weight: 400; font-size: 0.9rem;">({{ comments|length }})</span>
+    </h2>
+
+    {% if comments %}
+        <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem;">
             {% for comment in comments %}
-                <div class="box">
-                    <h5><u>{{ comment.user }}</u>: {{ comment.text }}</h5>
-                    <hr>
+                <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem;">
+                    <div style="font-size: 0.8rem; color: var(--accent); font-weight: 600; margin-bottom: 0.35rem; word-break: break-all;">
+                        {{ comment.user.email }}
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">{{ comment.text }}</p>
                 </div>
             {% endfor %}
-        {% else %}
-            <div class="box">
-                <h3>No comments yet.</h3>
-            </div>
-        {% endif %}
-        {% if not is_owner %}
-            <div class="box">
-                <form method="post" action="{% url 'comment phone' phone.id %}">
-                    {% csrf_token %}
-                    {{ comment_form }}
-                    <button class="btn btn-primary mt-2" type="submit">Add comment</button>
-                </form>
-            </div>
-        {% endif %}
-    </div>
+        </div>
+    {% else %}
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">No comments yet. Be the first!</p>
+    {% endif %}
+
+    {% if not is_owner and request.user.is_authenticated %}
+        <form method="post" action="{% url 'comment phone' phone.id %}" style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            {% csrf_token %}
+            <input type="text" name="text" placeholder="Write a comment…" maxlength="50" required style="margin-bottom: 0; flex: 1; min-width: 180px;">
+            <button type="submit" class="btn btn-primary">Post</button>
+        </form>
+    {% elif not request.user.is_authenticated %}
+        <p style="color: var(--text-muted); font-size: 0.875rem;">
+            <a href="{% url 'log in user' %}" style="color: var(--accent);">Log in</a> to leave a comment.
+        </p>
+    {% endif %}
+</div>
+
 {% endblock %}

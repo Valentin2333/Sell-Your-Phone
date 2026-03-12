@@ -9,23 +9,31 @@ from sell_your_phone.phones.forms import SellPhoneForm, CommentForm, EditPhoneFo
 from sell_your_phone.phones.models import Phone, Comment, Like
 
 
-class ListPhonesView(ListView, FormView):
+class ListPhonesView(ListView):
     template_name = 'phones/phone_list.html'
     context_object_name = 'phones'
     model = Phone
-    form_class = SearchForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = SearchForm()
+        return context
 
 
-class SearchResultsView(ListView, FormView):
+class SearchResultsView(ListView):
     model = Phone
     template_name = 'phones/search_results.html'
-    form_class = SearchForm
 
     def get_queryset(self):
         query = self.request.GET.get('q')
         object_list = Phone.objects.filter(brand__icontains=query)
         object_list_2 = Phone.objects.filter(phone_model__icontains=query)
         return object_list.union(object_list_2)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = SearchForm()
+        return context
 
 
 def phone_details(request, pk):
@@ -92,6 +100,12 @@ class EditPhoneView(LoginRequiredMixin, UpdateView):
     form_class = EditPhoneForm
     success_url = reverse_lazy('list phones')
     template_name = 'phones/phone_edit.html'
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        # Fixed: lock brand server-side so it cannot be changed via request tampering
+        form.fields['brand'].disabled = True
+        return form
 
 
 class DeletePhoneView(LoginRequiredMixin, DeleteView):

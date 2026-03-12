@@ -24,7 +24,7 @@ class RegisterView(CreateView):
 class LoginUserView(LoginView):
     template_name = 'accounts/login.html'
     authentication_form = LoginForm
-    success_url = reverse_lazy('index')
+    next_page = reverse_lazy('index')  # Fixed: LoginView uses next_page, not success_url
 
 
 def logout_user(request):
@@ -45,7 +45,7 @@ def profile_details(request):
             form.save()
             return redirect('profile details')
     else:
-        form = ProfileForm()
+        form = ProfileForm(instance=profile)  # Fixed: pass instance to pre-populate form on GET
 
     user_phones = Phone.objects.filter(user_id=request.user.id)
 

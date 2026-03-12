@@ -1,17 +1,26 @@
 {% extends 'shared/base.html' %}
-
 {% block content %}
-    <h1 class="text-center">List your phone</h1>
-    <div class="row">
-        <div class="col-lg-3"></div>
-        <div class="col-lg-6">
-            <form method="post" class="furniture-form" action="{% url 'sell phone' %}" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.errors }}
-                {{ form }}
-                <button class="btn btn-primary mt-2" type="submit">List for sale</button>
-            </form>
-        </div>
-        <div class="col-lg-3"></div>
+
+<div style="max-width: 580px; margin: 0 auto;">
+    <div style="margin-bottom: 2rem;">
+        <h1 style="font-size: 1.75rem; font-weight: 700;">List your phone</h1>
+        <p style="color: var(--text-muted); margin-top: 0.4rem;">Fill in the details below to post your listing.</p>
     </div>
+
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem;">
+        <form method="post" action="{% url 'sell phone' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div style="background: rgba(248,113,113,0.1); border: 1px solid var(--danger); border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; font-size: 0.875rem; color: var(--danger);">
+                    Please fix the errors below.
+                </div>
+            {% endif %}
+            {{ form }}
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 0.5rem;">
+                <i class="fa-solid fa-tag"></i> List for Sale
+            </button>
+        </form>
+    </div>
+</div>
+
 {% endblock %}

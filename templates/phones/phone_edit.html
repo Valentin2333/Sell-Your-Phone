@@ -1,15 +1,22 @@
 {% extends 'shared/base.html' %}
 {% block content %}
-    <h1 class="text-center">Edit phone</h1>
-    <div class="row">
-        <div class="col-lg-3"></div>
-        <div class="col-lg-6">
-            <form method="post" class="furniture-form" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form }}
-                <button class="btn btn-primary mt-2" type="submit">Update</button>
-            </form>
-        </div>
-        <div class="col-lg-3"></div>
+
+<div style="max-width: 580px; margin: 0 auto;">
+    <div style="margin-bottom: 2rem;">
+        <h1 style="font-size: 1.75rem; font-weight: 700;">Edit listing</h1>
+        <p style="color: var(--text-muted); margin-top: 0.4rem;">Update the details for your phone listing.</p>
     </div>
+
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem;">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form }}
+            <div style="display: flex; gap: 0.75rem; margin-top: 0.5rem;">
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+                <a href="javascript:history.back()" class="btn btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
 {% endblock %}

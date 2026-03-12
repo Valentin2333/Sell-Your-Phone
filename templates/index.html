@@ -1,33 +1,38 @@
 {% extends 'shared/base.html' %}
 {% block content %}
-    <form action="{% url 'search results' %}" method='get'>
-        {% csrf_token %}
-        {{ form }}
-    </form>
-    <div class="jumbotron parent" style="background-color: #74fd64">
-        <img style="width: 100%"
-             src="https://www.telegraph.co.uk/content/dam/recommended/2020/11/25/Best-smartphones-2020-review-summary_trans_NvBQzQNjv4Bq7bWQfKLf2dhrSxHZc33L6sZqUGxGI-SpjAtF4fl6ZDo.png?imwidth=1240"
-             alt="">
-        <div class="absolute">
-            <h1 class="display-5">Sell your phone fast and easy!</h1>
-            <hr class="my-4">
-            {% if not request.user.is_authenticated %}
-                <div class="inner cover">
-                    <h1 class="cover-heading"></h1>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <p class="lead">Already have an account? <br><a href="{% url 'log in user' %}"
-                                                                            class="btn btn-lg btn-secondary">Log In
-                            </a></p>
-                        </div>
-                        <div class="col-lg-6">
-                            <p class="lead"> Do not have an account? <br>
-                                <a href="{% url 'register user' %}" class="btn btn-lg btn-secondary">Register</a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
-        </div>
+
+<div class="hero">
+    <h1>Buy & Sell Phones <span>Fast</span></h1>
+    <p>The simplest way to list your used phone and find great deals near you.</p>
+    <div class="hero-actions">
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'sell phone' %}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> List Your Phone</a>
+            <a href="{% url 'list phones' %}" class="btn btn-outline"><i class="fa-solid fa-magnifying-glass"></i> Browse Listings</a>
+        {% else %}
+            <a href="{% url 'register user' %}" class="btn btn-primary"><i class="fa-solid fa-rocket"></i> Get Started</a>
+            <a href="{% url 'list phones' %}" class="btn btn-outline"><i class="fa-solid fa-magnifying-glass"></i> Browse Listings</a>
+        {% endif %}
     </div>
+</div>
+
+<form action="{% url 'search results' %}" method="get" class="search-bar">
+    <input type="text" name="q" placeholder="Search by brand or model (e.g. Samsung, iPhone 13)…">
+    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+</form>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; gap: 1rem; align-items: center;">
+        <i class="fa-solid fa-shield-halved" style="font-size: 1.5rem; color: var(--accent);"></i>
+        <div><strong>Trusted Listings</strong><p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.2rem;">All sellers are registered users</p></div>
+    </div>
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; gap: 1rem; align-items: center;">
+        <i class="fa-solid fa-bolt" style="font-size: 1.5rem; color: var(--accent);"></i>
+        <div><strong>Quick & Easy</strong><p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.2rem;">List your phone in under 2 minutes</p></div>
+    </div>
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; gap: 1rem; align-items: center;">
+        <i class="fa-solid fa-comments" style="font-size: 1.5rem; color: var(--accent);"></i>
+        <div><strong>Direct Contact</strong><p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.2rem;">Contact sellers directly via phone</p></div>
+    </div>
+</div>
+
 {% endblock %}

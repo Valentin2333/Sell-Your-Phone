@@ -1,28 +1,42 @@
 {% extends 'shared/base.html' %}
 {% block content %}
-    <form action="{% url 'search results' %}" method='get'>
-        {% csrf_token %}
-        {{ form }}
-    </form>
-    {% if object_list %}
-        <h1 class='text-center'>All phones</h1>
-        <div class="row">
-            {% for phone in object_list %}
-                <div class="col-lg-4" style="background-color: #74fd64">
-                    <div class="card" style="width: 18rem; background-color: #74fd64">
-                        <img src="{{ phone.image.url }}" class="card-img-top" style="width: 285px; height: 310px" alt="{{ phone.description }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ phone.brand }} {{ phone.phone_model }} {{ phone.year }}</h5>
-                            <h5 class="card-title">{{ phone.memory }}GB</h5>
-                            <h5 class="card-title">Price: {{ phone.price }}$</h5>
-                            <a href="{% url 'phone details' phone.id %}" class="btn btn-primary">See details</a>
-                        </div>
+
+<div class="page-header">
+    <h1>Search Results</h1>
+</div>
+
+<form action="{% url 'search results' %}" method="get" class="search-bar">
+    <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search by brand or model…">
+    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+</form>
+
+{% if object_list %}
+    <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">
+        Found {{ object_list|length }} result{{ object_list|length|pluralize }} for "<strong style="color: var(--text);">{{ request.GET.q }}</strong>"
+    </p>
+    <div class="phones-grid">
+        {% for phone in object_list %}
+            <div class="phone-card">
+                <img src="{{ phone.image.url }}" alt="{{ phone.brand }} {{ phone.phone_model }}">
+                <div class="phone-card-body">
+                    <div class="phone-card-title">{{ phone.brand }} {{ phone.phone_model }}</div>
+                    <div class="phone-card-meta">
+                        <span class="badge"><i class="fa-solid fa-calendar"></i> {{ phone.year }}</span>
+                        <span class="badge"><i class="fa-solid fa-memory"></i> {{ phone.memory }}GB</span>
                     </div>
+                    <div class="phone-card-price">${{ phone.price }}</div>
+                    <a href="{% url 'phone details' phone.id %}" class="btn btn-primary">View Details</a>
                 </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <h1 class='text-center'>No phones mached your search :(</h1>
-        <li><a class="btn btn-success" href="{% url 'sell phone' %}">List a phone</a></li>
-    {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <h2>No results found</h2>
+        <p>No phones matched "{{ request.GET.q }}". Try a different brand or model.</p>
+        <a href="{% url 'list phones' %}" class="btn btn-outline">Browse all phones</a>
+    </div>
+{% endif %}
+
 {% endblock %}
